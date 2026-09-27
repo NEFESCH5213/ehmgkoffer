@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#f3f2f2;color:#201e1d;font-family:Archivo,system-ui,sans-serif;font-size:16px;line-height:1.55}
+h1,h2,h3,h4,p{margin:0}
+a{color:#844c82;text-underline-offset:3px}
+a:hover{color:#5f3360}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <header style="position:sticky;top:0;z-index:5;background:#f3f2f2;border-bottom:2px solid rgba(32,30,29,.4);">
+    <div style="max-width:1240px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;gap:28px;">
+      <button onClick="{{ goStart }}" style="display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;cursor:pointer;margin-right:auto;text-align:left;">
+        <img src="assets/logo-sm.png" alt="" style="width:52px;height:42px;object-fit:cover;object-position:50% 45%;display:block;">
+        <span style="display:flex;flex-direction:column;">
+          <span style="font-weight:800;font-size:19px;letter-spacing:-.015em;line-height:1.1;color:#201e1d;">Der Violette Koffer</span>
+          <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#605d5d;">Erste Hilfe für mentale Gesundheit</span>
+        </span>
+      </button>
+      <nav style="display:flex;gap:22px;font-size:14px;">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.go }}" style="background:none;border:0;padding:4px 0;cursor:pointer;font-size:14px;color:{{ n.color }};font-weight:{{ n.weight }};border-bottom:2px solid {{ n.line }};">{{ n.label }}</button>
+        </sc-for>
+      </nav>
+      <button onClick="{{ goHilfe }}" style="background:#844c82;color:#fff;border:0;padding:10px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;" style-hover="background:#6a3a68;">
+        <span style="font-weight:800;font-size:14px;">Sofort Hilfe</span>
+        <span style="font-size:12px;">116 123 · 112</span>
+      </button>
+    </div>
+  </header>
+
+  <main style="flex:1;">
+    <sc-if value="{{ isHilfe }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Soforthilfe" style="max-width:1240px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;">
+        <div style="display:flex;flex-direction:column;gap:24px;">
+          <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Soforthilfe</span>
+          <h1 style="font-size:84px;line-height:.98;letter-spacing:-.03em;font-weight:800;">Du bist nicht allein.</h1>
+          <p style="font-size:20px;max-width:26ch;">Anrufen ist kostenlos und anonym. Niemand erfährt davon.</p>
+          <div style="margin-top:24px;padding:24px;background:#eae9e9;display:flex;flex-direction:column;gap:10px;">
+            <h3 style="font-size:20px;font-weight:800;">Nicht sicher, was los ist?</h3>
+            <p style="font-size:15px;">Beschreib, was du siehst – wir zeigen dir den nächsten Schritt.</p>
+            <button onClick="{{ goSituationen }}" style="align-self:flex-start;margin-top:6px;background:none;border:1px solid rgba(32,30,29,.4);padding:10px 14px;font-weight:800;font-size:14px;cursor:pointer;" style-hover="background:rgba(32,30,29,.07);">Hilfe zu bestimmten Themen öffnen +</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;">
+          <a href="tel:116123" style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;padding:28px 32px;background:#844c82;color:#fff;text-decoration:none;" style-hover="background:#6a3a68;color:#fff;">
+            <span style="font-size:64px;font-weight:800;letter-spacing:-.02em;line-height:1;">116 123</span>
+            <span style="display:flex;flex-direction:column;"><span style="font-weight:800;font-size:18px;">TelefonSeelsorge</span><span style="font-size:14px;">rund um die Uhr · auch Chat &amp; Mail</span></span>
+            <span style="font-size:14px;font-weight:800;border:1px solid #fff;padding:8px 12px;">Anrufen</span>
+          </a>
+          <a href="tel:116117" style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;padding:24px 32px;border-bottom:2px solid rgba(32,30,29,.4);color:#201e1d;text-decoration:none;" style-hover="background:#eae9e9;color:#201e1d;">
+            <span style="font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1;">116 117</span>
+            <span style="display:flex;flex-direction:column;"><span style="font-weight:800;font-size:17px;">Ärztlicher Bereitschaftsdienst</span><span style="font-size:14px;color:#605d5d;">wenn die Praxis zu hat</span></span>
+            <span style="font-size:14px;font-weight:800;">Anrufen →</span>
+          </a>
+          <a href="tel:112" style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;padding:24px 32px;border-bottom:2px solid rgba(32,30,29,.4);color:#201e1d;text-decoration:none;" style-hover="background:#eae9e9;color:#201e1d;">
+            <span style="font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1;min-width:3.4ch;">112</span>
+            <span style="display:flex;flex-direction:column;"><span style="font-weight:800;font-size:17px;">Notruf</span><span style="font-size:14px;color:#605d5d;">bei akuter Gefahr</span></span>
+            <span style="font-size:14px;font-weight:800;">Anrufen →</span>
+          </a>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+            <div style="padding:24px;background:#eae9e9;display:flex;flex-direction:column;gap:10px;">
+              <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Mental stark leben · Sprechstunde</span>
+              <h3 style="font-size:20px;font-weight:800;line-height:1.15;">Kostenlose erste fachliche Einschätzung</h3>
+              <p style="font-size:14px;flex:1;">Per Video oder Telefon, mit einem echten Termin. Du musst dafür nichts erklären können.</p>
+              <button style="align-self:flex-start;background:#844c82;color:#fff;border:0;padding:10px 14px;font-weight:800;font-size:14px;cursor:pointer;" style-hover="background:#6a3a68;">Termin finden</button>
+            </div>
+            <button onClick="{{ goMutmacher }}" style="padding:24px;background:#201e1d;color:#f3f2f2;border:0;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:10px;">
+              <span style="display:flex;justify-content:space-between;width:100%;font-size:12px;"><span style="letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:#c9a3c7;">Hab ich auch erlebt.</span><span>▶ 0:60</span></span>
+              <span style="font-size:20px;font-weight:800;line-height:1.2;flex:1;">„Hab ich auch erlebt. Und ich bin noch hier.“</span>
+              <span style="font-size:13px;">Florian Künstler · Schirmherr, Musiker</span>
+              <span style="font-size:14px;font-weight:800;text-decoration:underline;text-underline-offset:3px;">Mehr Mutmacher</span>
+            </button>
+          </div>
+          <p style="font-size:14px;color:#605d5d;margin-top:32px;max-width:62ch;">Du suchst längerfristig Begleitung? Das C-STAB-Netzwerk vermittelt über 350 werteorientierte Fachpersonen. Wenn Geld der Grund ist, warum du keine Beratung bekommst: Der Soforthilfefonds Consultivo Sospeso übernimmt Erstberatungen – <a href="mailto:hallo@nefesch.org">hallo@nefesch.org</a>.</p>
+          <p style="font-size:13px;color:#605d5d;margin-top:12px;">Diese Seite speichert nichts über dich. Keine Tracker, keine Cookies.</p>
+        </div>
+      </section>
+    </sc-if>
+    <sc-if value="{{ isStart }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Startseite">
+        <section style="background:#844c82;color:#fff;">
+          <div style="max-width:1240px;margin:0 auto;padding:80px 32px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:center;">
+            <div style="display:flex;flex-direction:column;gap:24px;">
+              <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Erste Hilfe für mentale Gesundheit</span>
+              <h1 style="font-size:96px;line-height:.95;letter-spacing:-.03em;font-weight:800;">Der Violette Koffer</h1>
+              <p style="font-size:22px;max-width:30ch;">Erste Hilfe für mentale Gesundheit – hängt neben dem roten Kasten.</p>
+              <div style="display:flex;gap:12px;margin-top:8px;">
+                <button onClick="{{ goHilfe }}" style="background:#fff;color:#844c82;border:0;padding:14px 20px;font-weight:800;font-size:15px;cursor:pointer;" style-hover="background:#f3e8f2;">Im Notfall: Hilfe finden</button>
+                <button onClick="{{ goKoffer }}" style="background:none;color:#fff;border:1px solid #fff;padding:14px 20px;font-weight:800;font-size:15px;cursor:pointer;" style-hover="background:rgba(255,255,255,.12);">Den Koffer kennenlernen</button>
+              </div>
+            </div>
+            <div style="position:relative;">
+              <img src="assets/logo-sm.png" alt="Der Violette Koffer" style="width:100%;display:block;">
+              <span style="position:absolute;right:0;bottom:-12px;background:#201e1d;color:#fff;font-size:12px;font-weight:800;letter-spacing:.08em;padding:6px 10px;">RAL 4008</span>
+            </div>
+          </div>
+        </section>
+
+        <section style="max-width:1240px;margin:0 auto;padding:96px 32px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Die Idee</span>
+            <h2 style="font-size:52px;line-height:1.02;letter-spacing:-.02em;font-weight:800;">Hier fehlt etwas an der Wand.</h2>
+            <p style="font-size:17px;text-wrap:pretty;">In fast jedem Betrieb hängt ein roter Kasten. Genormt, geprüft, mit Ersthelfenden daneben. Für einen aufgeschürften Unterarm ist alles geregelt.</p>
+            <p style="font-size:17px;text-wrap:pretty;">Für den Menschen, der um 14 Uhr in der Teeküche zu weinen anfängt, ist nichts geregelt. Der violette Koffer schließt diese Lücke – für die Seele.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:32px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;font-size:15px;">
+              <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:#ae1800;padding:10px 0;border-bottom:2px solid #201e1d;">Roter Kasten · DIN 13157</span>
+              <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:#844c82;padding:10px 0;border-bottom:2px solid #201e1d;">Violetter Koffer</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Anleitung im Deckel</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);">Sicherheits-Check + SICHER-Plan</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Verbandpäckchen</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);">12 Situationskarten</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Rettungsdecke</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);">Anker-Objekt</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Notruf-Aufkleber 112</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);">„Im Zweifel sofort“-Karte</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Pflaster</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);">Zuspruchkarten</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Prüfplakette</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);">Prüfprotokoll + Sticker</span>
+              <span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);color:#605d5d;">Erste-Hilfe-Kurs (Pflicht)</span><span style="padding:10px 0;border-bottom:1px solid rgba(32,30,29,.3);font-weight:800;color:#844c82;">SICHER-Videokurs, kostenfrei</span>
+            </div>
+            <div style="background:#eae9e9;padding:28px;display:flex;flex-direction:column;gap:14px;">
+              <p style="font-size:20px;font-weight:600;line-height:1.35;">„So wie ein Verbandskasten ohne Erste-Hilfe-Kurs nur eine Box mit Pflastern ist, entfaltet der violette Koffer seine Wirkung erst durch das SICHER-Prinzip, das dahintersteht.“</p>
+              <p style="font-size:15px;color:#605d5d;">Deshalb liegt SICHER jedem Koffer kostenfrei digital bei.</p>
+              <button onClick="{{ goSicher }}" style="align-self:flex-start;background:#844c82;color:#fff;border:0;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer;" style-hover="background:#6a3a68;">Zum SICHER-Videokurs</button>
+            </div>
+          </div>
+        </section>
+
+        <section style="border-top:2px solid rgba(32,30,29,.4);">
+          <div style="max-width:1240px;margin:0 auto;padding:96px 32px;display:flex;flex-direction:column;gap:48px;">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Wie er wirkt</span>
+              <h2 style="font-size:52px;line-height:1.02;letter-spacing:-.02em;font-weight:800;">Vorher. Im Moment. Danach.</h2>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;">
+              <div style="display:flex;flex-direction:column;gap:12px;border-top:2px solid #201e1d;padding-top:20px;"><span style="font-size:40px;font-weight:800;color:#844c82;line-height:1;">01</span><h3 style="font-size:24px;font-weight:800;">Er hängt da.</h3><p style="font-size:15px;">Ohne ein Wort sagt er: Hier darf es der Seele schlecht gehen. Das normalisiert – auch für alle, die ihn nie öffnen.</p></div>
+              <div style="display:flex;flex-direction:column;gap:12px;border-top:2px solid #201e1d;padding-top:20px;"><span style="font-size:40px;font-weight:800;color:#844c82;line-height:1;">02</span><h3 style="font-size:24px;font-weight:800;">Er führt durch die Situation.</h3><p style="font-size:15px;">Er nimmt dir die drei schwersten Dinge ab: die Einordnung, die Worte und den nächsten Schritt.</p></div>
+              <div style="display:flex;flex-direction:column;gap:12px;border-top:2px solid #201e1d;padding-top:20px;"><span style="font-size:40px;font-weight:800;color:#844c82;line-height:1;">03</span><h3 style="font-size:24px;font-weight:800;">Er gibt etwas mit, das bleibt.</h3><p style="font-size:15px;">Eine Zuspruchkarte für die Hosentasche. Ihr QR-Code führt zu Menschen, die sagen: Hab ich auch erlebt.</p></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:#201e1d;color:#f3f2f2;">
+              <div style="padding:28px 24px;display:flex;flex-direction:column;gap:4px;"><span style="font-size:44px;font-weight:800;line-height:1;">48</span><span style="font-size:14px;color:#bab6b6;">Positionen</span></div>
+              <div style="padding:28px 24px;display:flex;flex-direction:column;gap:4px;border-left:1px solid #444141;"><span style="font-size:44px;font-weight:800;line-height:1;">6</span><span style="font-size:14px;color:#bab6b6;">Fächer</span></div>
+              <div style="padding:28px 24px;display:flex;flex-direction:column;gap:4px;border-left:1px solid #444141;"><span style="font-size:44px;font-weight:800;line-height:1;color:#c9a3c7;">RAL 4008</span><span style="font-size:14px;color:#bab6b6;">die Farbe der Notfallseelsorge</span></div>
+              <div style="padding:28px 24px;display:flex;flex-direction:column;gap:4px;border-left:1px solid #444141;"><span style="font-size:44px;font-weight:800;line-height:1;">116 123</span><span style="font-size:14px;color:#bab6b6;">auf jeder Karte</span></div>
+              <div style="padding:28px 24px;display:flex;flex-direction:column;gap:4px;border-left:1px solid #444141;"><span style="font-size:44px;font-weight:800;line-height:1;">SICHER</span><span style="font-size:14px;color:#bab6b6;">Videokurs, kostenfrei</span></div>
+            </div>
+            <p style="font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.1;max-width:22ch;padding:32px 0 0;">Du musst nicht alles richtig machen. Da sein reicht.</p>
+          </div>
+        </section>
+
+        <section style="background:#eae9e9;">
+          <div style="max-width:1240px;margin:0 auto;padding:80px 32px;display:flex;flex-direction:column;gap:32px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;">
+              <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Editionen</span><h2 style="font-size:44px;line-height:1.02;letter-spacing:-.02em;font-weight:800;">Ein Kern. Fünf Editionen.</h2></div>
+              <button onClick="{{ goKoffer }}" style="background:none;border:1px solid rgba(32,30,29,.4);padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer;" style-hover="background:rgba(32,30,29,.07);">Editionen &amp; Bestellung</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;">
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;min-height:170px;"><span style="align-self:flex-start;font-size:10px;letter-spacing:.08em;font-weight:800;background:#844c82;color:#fff;padding:3px 8px;">START-DUO</span><h3 style="font-size:20px;font-weight:800;margin-top:auto;">Standard</h3><p style="font-size:13px;color:#605d5d;">Betriebe, Verwaltungen, Vereine</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;min-height:170px;"><span style="align-self:flex-start;font-size:10px;letter-spacing:.08em;font-weight:800;background:#844c82;color:#fff;padding:3px 8px;">START-DUO</span><h3 style="font-size:20px;font-weight:800;margin-top:auto;">Kirche &amp; Gemeinde</h3><p style="font-size:13px;color:#605d5d;">Kirchen, Werke, C-STAB</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;min-height:170px;"><h3 style="font-size:20px;font-weight:800;margin-top:auto;">Schule &amp; Jugend</h3><p style="font-size:13px;color:#605d5d;">Schulen, Jugendclubs</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;min-height:170px;"><h3 style="font-size:20px;font-weight:800;margin-top:auto;">60plus</h3><p style="font-size:13px;color:#605d5d;">Senioreneinrichtungen, Nachbarschaftshilfe</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;min-height:170px;"><h3 style="font-size:20px;font-weight:800;margin-top:auto;">Einfache Sprache</h3><p style="font-size:13px;color:#605d5d;">Integration, Werkstätten</p></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isSicher }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="SICHER-Videokurs">
+        <section style="max-width:1240px;margin:0 auto;padding:72px 32px 48px;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:64px;align-items:end;">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Videokurs · kostenfrei</span>
+            <h1 style="font-size:64px;line-height:1;letter-spacing:-.03em;font-weight:800;">Das SICHER-Prinzip – kostenfrei zu jedem Koffer.</h1>
+          </div>
+          <p style="font-size:18px;text-wrap:pretty;">Sechs Schritte, ein Wort, das man sich merkt. Zu jedem Buchstaben ein Video von 30 bis 60 Sekunden, im Hochformat und untertitelt.</p>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:0 32px 80px;display:flex;flex-direction:column;gap:32px;">
+          <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:2px solid #201e1d;">
+            <sc-for list="{{ sicherLetters }}" as="x" hint-placeholder-count="6">
+              <button onClick="{{ x.on }}" style="background:{{ x.bg }};color:{{ x.fg }};border:0;border-right:1px solid rgba(32,30,29,.4);font-size:96px;font-weight:800;line-height:1;padding:24px 0;cursor:pointer;">{{ x.l }}</button>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:320px minmax(0,1fr);gap:48px;align-items:start;">
+            <div style="aspect-ratio:9/16;background:#201e1d;color:#f3f2f2;display:flex;flex-direction:column;justify-content:space-between;padding:20px;">
+              <span style="font-size:12px;display:flex;justify-content:space-between;"><span>{{ sicherN }}</span><span>1 Min</span></span>
+              <span style="align-self:center;width:64px;height:64px;border:2px solid #f3f2f2;border-radius:50%;display:grid;place-items:center;font-size:22px;">▶</span>
+              <span style="font-size:12px;color:#bab6b6;">[Video in Produktion]</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;padding-top:8px;">
+              <span style="font-size:160px;font-weight:800;line-height:.8;color:#844c82;">{{ sicherL }}</span>
+              <h2 style="font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:16px;">{{ sicherT }}</h2>
+              <p style="font-size:20px;max-width:40ch;">{{ sicherB }}</p>
+            </div>
+          </div>
+        </section>
+        <section style="background:#844c82;color:#fff;">
+          <div style="max-width:1240px;margin:0 auto;padding:72px 32px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;">
+            <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Der Schritt, der den Unterschied macht</span><h2 style="font-size:52px;font-weight:800;letter-spacing:-.02em;line-height:1;">Handeln oder Halten?</h2></div>
+            <p style="font-size:22px;line-height:1.45;">Die meisten scheitern nicht daran, dass sie nichts tun – sondern daran, dass sie zu schnell etwas tun. Manchmal ist Dabeibleiben die ganze Hilfe.</p>
+          </div>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:80px 32px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px;">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Dazu: 8 Impulsvideos</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:32px;font-size:17px;">
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">Sicherheits-Check<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">SICHER in 60 Sekunden<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">4-7-8-Atmung zum Mitmachen<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">Was sage ich – was nicht<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">Panikattacke begleiten<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">Der Wahrnehmungssatz<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">Deine Rolle – nicht deine Rolle<span style="color:#844c82;">▶</span></span>
+              <span style="padding:14px 0;border-bottom:1px solid rgba(32,30,29,.3);display:flex;justify-content:space-between;">Debrief für dich<span style="color:#844c82;">▶</span></span>
+            </div>
+            <p style="font-size:13px;color:#605d5d;">Kein Login nötig. Später ggf. Zugang über den Code in deinem Koffer.</p>
+          </div>
+          <div style="background:#eae9e9;padding:28px;display:flex;flex-direction:column;gap:12px;align-self:start;">
+            <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Empfehlung</span>
+            <h3 style="font-size:26px;font-weight:800;line-height:1.1;">Werde Ersthelfer:in für mentale Gesundheit</h3>
+            <p style="font-size:15px;">SICHER ist der Kern der EHMG-Ausbildung. Wer weitergehen will, ist herzlich eingeladen.</p>
+            <button style="align-self:flex-start;background:#844c82;color:#fff;border:0;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer;" style-hover="background:#6a3a68;">Mehr erfahren</button>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isKoffer }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Der Koffer">
+        <section style="max-width:1240px;margin:0 auto;padding:72px 32px 48px;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:64px;align-items:end;">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Der Koffer</span>
+            <h1 style="font-size:64px;line-height:1;letter-spacing:-.03em;font-weight:800;">6 Fächer. 48 Positionen. Ein Ablauf.</h1>
+          </div>
+          <p style="font-size:18px;text-wrap:pretty;">Die Fächer sind keine Sortierhilfe, sondern der Ablauf einer Krisensituation – von links oben nach rechts unten.</p>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:0 32px 80px;">
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto;gap:4px;background:#844c82;padding:4px;">
+            <div style="background:#f3f2f2;padding:24px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:48px;font-weight:800;color:#844c82;line-height:1;">1</span><span style="font-size:13px;color:#605d5d;">5 Positionen</span></div>
+              <h3 style="font-size:24px;font-weight:800;">Orientierung</h3>
+              <p style="font-size:15px;color:#605d5d;">Bin ich sicher? Was ist der erste Schritt?</p>
+              <div style="display:flex;flex-direction:column;font-size:14px;margin-top:8px;">
+                <span style="padding:8px 0;border-top:1px solid rgba(32,30,29,.3);">Sicherheits-Check im Deckel</span>
+                <span style="padding:8px 0;border-top:1px solid rgba(32,30,29,.3);">SICHER-Plan (Faltkarte)</span>
+                <span style="padding:8px 0;border-top:1px solid rgba(32,30,29,.3);">Kurzanleitung in 5 Schritten</span>
+                <span style="padding:8px 0;border-top:1px solid rgba(32,30,29,.3);">QR-Code-Karte zur Website</span>
+                <span style="padding:8px 0;border-top:1px solid rgba(32,30,29,.3);color:#605d5d;">Notizblock &amp; Stift (optional)</span>
+              </div>
+            </div>
+            <button onClick="{{ goSituationen }}" style="background:#f3f2f2;padding:24px;display:flex;flex-direction:column;gap:10px;border:0;text-align:left;cursor:pointer;color:#201e1d;" style-hover="background:#eae9e9;">
+              <span style="display:flex;justify-content:space-between;align-items:baseline;width:100%;"><span style="font-size:48px;font-weight:800;color:#844c82;line-height:1;">2</span><span style="font-size:13px;color:#605d5d;">15 Positionen +</span></span>
+              <span style="font-size:24px;font-weight:800;">Situationskarten</span>
+              <span style="font-size:15px;color:#605d5d;">Was sehe ich – und was sage ich jetzt?</span>
+            </button>
+            <div style="background:#f3f2f2;padding:24px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:48px;font-weight:800;color:#844c82;line-height:1;">3</span><span style="font-size:13px;color:#605d5d;">8 Positionen +</span></div>
+              <h3 style="font-size:24px;font-weight:800;">Selbstfürsorge &amp; Rollenklarheit</h3>
+              <p style="font-size:15px;color:#605d5d;">Was ist meine Aufgabe – und was nicht?</p>
+            </div>
+            <div style="background:#f3f2f2;padding:24px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:48px;font-weight:800;color:#844c82;line-height:1;">4</span><span style="font-size:13px;color:#605d5d;">6 Positionen +</span></div>
+              <h3 style="font-size:24px;font-weight:800;">Weiterverweisung &amp; Notfall</h3>
+              <p style="font-size:15px;color:#605d5d;">Wohin geht es von hier?</p>
+            </div>
+            <button onClick="{{ goRad }}" style="background:#f3f2f2;padding:24px;display:flex;flex-direction:column;gap:10px;border:0;text-align:left;cursor:pointer;color:#201e1d;" style-hover="background:#eae9e9;">
+              <span style="display:flex;justify-content:space-between;align-items:baseline;width:100%;"><span style="font-size:48px;font-weight:800;color:#844c82;line-height:1;">5</span><span style="font-size:13px;color:#605d5d;">11 Positionen +</span></span>
+              <span style="font-size:24px;font-weight:800;">Sensorik &amp; Sofort-Beruhigung</span>
+              <span style="font-size:15px;color:#605d5d;">Was kann ich in die Hand geben?</span>
+              <span style="font-size:13px;font-weight:800;color:#844c82;margin-top:auto;">Emotionsrad ausprobieren →</span>
+            </button>
+            <div style="background:#f3f2f2;padding:24px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:48px;font-weight:800;color:#844c82;line-height:1;">6</span><span style="font-size:13px;color:#605d5d;">3 Positionen +</span></div>
+              <h3 style="font-size:24px;font-weight:800;">Wartung</h3>
+              <p style="font-size:15px;color:#605d5d;">Wer hält den Koffer lebendig?</p>
+            </div>
+          </div>
+        </section>
+        <section style="background:#eae9e9;">
+          <div style="max-width:1240px;margin:0 auto;padding:80px 32px;display:flex;flex-direction:column;gap:32px;">
+            <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Editionen</span><h2 style="font-size:44px;line-height:1.02;letter-spacing:-.02em;font-weight:800;">Über 90 % gleich. Der Rest passt zu dir.</h2></div>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;">
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Standard</h3><p style="font-size:14px;color:#605d5d;">Betriebe, Verwaltungen, Vereine. Die Referenz, weltanschaulich neutral.</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Kirche &amp; Gemeinde</h3><p style="font-size:14px;color:#605d5d;">Offen christliche Zusprüche, Zusatzmodul mit Segenstexten und LED-Teelicht.</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Schule &amp; Jugend</h3><p style="font-size:14px;color:#605d5d;">Jugendnahe Sprache, 116 111 und krisenchat prominent, ohne Öle.</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">60plus</h3><p style="font-size:14px;color:#605d5d;">Silbernetz, große Schrift, Einsamkeit und Trauer im Alter.</p></div>
+              <div style="background:#f3f2f2;padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Einfache Sprache</h3><p style="font-size:14px;color:#605d5d;">Geprüfte Einfache Sprache, mehr Piktogramme, mehrsprachige QR-Seite.</p></div>
+            </div>
+          </div>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:80px 32px;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:64px;">
+          <h2 style="font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1.05;">Was der Koffer nicht ist</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px 40px;font-size:16px;">
+            <p style="border-top:2px solid #201e1d;padding-top:14px;"><strong>Kein Medizinprodukt.</strong> Keine Therapie, keine Diagnostik, keine Heilkunde.</p>
+            <p style="border-top:2px solid #201e1d;padding-top:14px;"><strong>Kein Ersatz für den Notruf.</strong> Im Zweifel: 112.</p>
+            <p style="border-top:2px solid #201e1d;padding-top:14px;"><strong>Kein Debriefing.</strong> Zuhören, wenn jemand erzählt – nicht herausfragen.</p>
+            <p style="border-top:2px solid #201e1d;padding-top:14px;"><strong>Kein Vorfalls-Logbuch.</strong> Keine Namen, keine Vorfälle. Wer ihn nutzt, hinterlässt keine Spur.</p>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isSit }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Situationskarten">
+        <section style="max-width:1240px;margin:0 auto;padding:72px 32px 40px;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:64px;align-items:end;">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Fach 2 · Situationskarten</span>
+            <h1 style="font-size:72px;line-height:1;letter-spacing:-.03em;font-weight:800;">Was siehst du?</h1>
+          </div>
+          <p style="font-size:18px;text-wrap:pretty;">Die Karten heißen nicht nach Diagnosen, sondern nach dem, was du siehst. Du musst nicht wissen, wie etwas heißt.</p>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:0 32px 80px;display:flex;flex-direction:column;gap:24px;">
+          <div style="display:flex;gap:0;border:1px solid rgba(32,30,29,.4);align-self:flex-start;">
+            <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.on }}" style="background:{{ f.bg }};color:{{ f.fg }};border:0;border-right:1px solid rgba(32,30,29,.4);padding:10px 16px;font-size:13px;font-weight:800;letter-spacing:.04em;cursor:pointer;">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;">
+            <sc-for list="{{ situations }}" as="c" hint-placeholder-count="12">
+              <button onClick="{{ c.go }}" style="background:#eae9e9;border:0;border-top:4px solid {{ c.catColor }};padding:20px;min-height:180px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:10px;color:#201e1d;" style-hover="background:#e0dcdf;">
+                <span style="display:flex;justify-content:space-between;width:100%;font-size:11px;letter-spacing:.1em;font-weight:800;"><span style="color:{{ c.catColor }};">{{ c.cat }}</span><span>{{ c.num }}</span></span>
+                <span style="font-size:20px;font-weight:800;line-height:1.2;flex:1;">{{ c.title }}</span>
+                <span style="align-self:flex-start;font-size:10px;letter-spacing:.08em;font-weight:800;border:1px solid #ae1800;color:#ae1800;padding:2px 7px;visibility:{{ c.vis }};">ACHTUNG</span>
+              </button>
+            </sc-for>
+          </div>
+        </section>
+        <section style="background:#844c82;color:#fff;">
+          <div style="max-width:1240px;margin:0 auto;padding:72px 32px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px;align-items:center;">
+            <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Auf jeder Karte gleich</span><h2 style="font-size:64px;font-weight:800;letter-spacing:-.02em;line-height:1;">„Ich nehme wahr, dass …“</h2></div>
+            <p style="font-size:18px;">Beschreiben statt bewerten. Gefühle in Worte zu fassen, beruhigt – besonders, wenn die Worte vorgegeben sind. Darum steht der Satz fertig zum Vorlesen auf jeder Karte.</p>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isKarte }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Situationskarte 04">
+        <section style="max-width:1240px;margin:0 auto;padding:40px 32px 80px;display:flex;flex-direction:column;gap:32px;">
+          <button onClick="{{ goSituationen }}" style="align-self:flex-start;background:none;border:0;padding:0;font-size:14px;cursor:pointer;color:#844c82;font-weight:800;">← Alle Situationen</button>
+          <div style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:start;">
+            <div style="display:flex;flex-direction:column;gap:24px;">
+              <span style="display:flex;gap:16px;font-size:12px;letter-spacing:.1em;font-weight:800;color:#844c82;"><span>BEGLEITEN</span><span style="color:#201e1d;">04</span></span>
+              <h1 style="font-size:64px;line-height:1;letter-spacing:-.03em;font-weight:800;">Jemand hat eine Panikattacke</h1>
+              <div style="background:#ae1800;color:#fff;padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;">
+                <p style="font-size:15px;"><strong>ACHTUNG:</strong> Brustschmerz, Lähmung, verwaschene Sprache oder bekannter Diabetes? Kann Herzinfarkt, Schlaganfall oder Unterzucker sein.</p>
+                <a href="tel:112" style="background:#fff;color:#ae1800;font-weight:800;font-size:22px;padding:10px 18px;text-decoration:none;">112</a>
+              </div>
+              <div style="display:flex;flex-direction:column;">
+                <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;padding:18px 0;border-top:2px solid #201e1d;"><span style="font-size:36px;font-weight:800;color:#844c82;line-height:1;">1</span><p style="font-size:18px;"><strong>BLEIBEN</strong> – ruhig daneben, langsam und leise sprechen.</p></div>
+                <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;padding:18px 0;border-top:1px solid rgba(32,30,29,.3);"><span style="font-size:36px;font-weight:800;color:#844c82;line-height:1;">2</span><p style="font-size:18px;"><strong>SAGEN</strong> – den Satz unten vorlesen, ruhig wiederholen.</p></div>
+                <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;padding:18px 0;border-top:1px solid rgba(32,30,29,.3);border-bottom:1px solid rgba(32,30,29,.3);"><span style="font-size:36px;font-weight:800;color:#844c82;line-height:1;">3</span><p style="font-size:18px;"><strong>ANBIETEN</strong> – Strohhalm: langsam hindurch ausatmen.</p></div>
+              </div>
+              <div style="background:#844c82;color:#fff;padding:32px;">
+                <p style="font-size:28px;font-weight:800;line-height:1.25;letter-spacing:-.01em;">„Ich nehme wahr, dass du gerade ganz schnell atmest. Ich bleibe bei dir. Wir atmen zusammen langsam aus.“</p>
+              </div>
+              <div style="display:flex;gap:24px;font-size:14px;"><span><strong>Fach 5</strong> Strohhalm · Kühlpad</span><span style="color:#605d5d;">Unsicher? <strong style="color:#201e1d;">Fach 4</strong></span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;position:sticky;top:100px;">
+              <div style="aspect-ratio:9/14;background:#201e1d;color:#f3f2f2;display:flex;flex-direction:column;justify-content:space-between;padding:24px;">
+                <span style="font-size:12px;display:flex;justify-content:space-between;"><span>In 60 Sekunden</span><span>0:60</span></span>
+                <span style="align-self:center;width:72px;height:72px;border:2px solid #f3f2f2;border-radius:50%;display:grid;place-items:center;font-size:24px;">▶</span>
+                <span style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:22px;font-weight:800;">Eine Panikattacke begleiten</span><span style="font-size:13px;color:#bab6b6;">Untertitelt. Startet erst, wenn du tippst.</span></span>
+              </div>
+              <span style="font-size:12px;color:#605d5d;">[Video in Produktion]</span>
+            </div>
+          </div>
+        </section>
+        <section style="background:#eae9e9;">
+          <div style="max-width:1240px;margin:0 auto;padding:72px 32px;display:flex;flex-direction:column;gap:32px;">
+            <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Hintergrund</span><h2 style="font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1;">Was passiert hier?</h2></div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 48px;">
+              <div style="display:flex;flex-direction:column;gap:8px;border-top:2px solid #201e1d;padding-top:16px;"><h3 style="font-size:20px;font-weight:800;">Körperlich</h3><p style="font-size:15px;">Der Körper schaltet auf Alarm: Das Herz rast, der Atem wird schnell und flach, es kribbelt, die Brust wird eng. Das fühlt sich bedrohlich an, klingt aber meist nach einigen Minuten wieder ab.</p></div>
+              <div style="display:flex;flex-direction:column;gap:8px;border-top:2px solid #201e1d;padding-top:16px;"><h3 style="font-size:20px;font-weight:800;">Psychisch</h3><p style="font-size:15px;">Viele haben das Gefühl, die Kontrolle zu verlieren oder zu sterben. Erklärungen erreichen jetzt wenig. Eine ruhige Stimme und ein langsamer Atemrhythmus erreichen viel.</p></div>
+              <div style="display:flex;flex-direction:column;gap:8px;border-top:2px solid #201e1d;padding-top:16px;"><h3 style="font-size:20px;font-weight:800;">Ziel der Begleitung</h3><p style="font-size:15px;">Nicht die Angst wegmachen – sondern mit ihr zusammen bleiben, bis sie abklingt. Langsames Ausatmen hilft dem Nervensystem, herunterzufahren.</p></div>
+              <div style="display:flex;flex-direction:column;gap:8px;border-top:2px solid #ae1800;padding-top:16px;"><h3 style="font-size:20px;font-weight:800;color:#ae1800;">Abgrenzung zum medizinischen Notfall</h3><p style="font-size:15px;">Brustschmerz, der in Arm oder Kiefer ausstrahlt, einseitige Lähmung, hängender Mundwinkel, verwaschene Sprache, Verwirrtheit oder bekannter Diabetes: nicht abwarten. Im Zweifel immer 112.</p></div>
+            </div>
+          </div>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:72px 32px;display:flex;flex-direction:column;gap:24px;">
+          <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Werkzeuge aus Fach 5</span>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;">
+            <div style="border:1px solid rgba(32,30,29,.4);padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Strohhalm</h3><p style="font-size:14px;flex:1;">Verlängert das Ausatmen – ohne dass jemand eine Technik erklären muss.</p><span style="font-size:12px;color:#844c82;font-weight:800;">Karte 04</span></div>
+            <div style="border:1px solid rgba(32,30,29,.4);padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Kühlpad</h3><p style="font-size:14px;flex:1;">Ein Kältereiz holt aus der Übererregung. Immer eingewickelt.</p><span style="font-size:12px;color:#844c82;font-weight:800;">Karte 03 · 04</span></div>
+            <div style="border:1px solid rgba(32,30,29,.4);padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Lavendelöl</h3><p style="font-size:14px;flex:1;">Ein Duft, der dämpft. Nur anbieten, wenn die Person zustimmt.</p><span style="font-size:12px;color:#844c82;font-weight:800;">Karte 03 · 04</span></div>
+            <div style="border:1px solid rgba(32,30,29,.4);padding:20px;display:flex;flex-direction:column;gap:8px;"><h3 style="font-size:20px;font-weight:800;">Anker-Objekt</h3><p style="font-size:14px;flex:1;">Halt über den Tastsinn: „Ich bin bei dir. Du bist nicht allein.“</p><span style="font-size:12px;color:#844c82;font-weight:800;">Karte 02 · 04 · 05 · 08</span></div>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isMut }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Mutmacher">
+        <section style="max-width:1240px;margin:0 auto;padding:72px 32px 48px;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:64px;align-items:end;">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Mutmacher</span>
+            <h1 style="font-size:72px;line-height:1;letter-spacing:-.03em;font-weight:800;">Menschen, die es selbst kennen.</h1>
+          </div>
+          <p style="font-size:18px;">60 Sekunden, eine Botschaft: Hab ich auch erlebt. Und ich bin noch hier. Kein Video startet von selbst.</p>
+        </section>
+        <section style="max-width:1240px;margin:0 auto;padding:0 32px 80px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="aspect-ratio:9/14;background:#844c82;color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between;">
+              <span style="display:flex;justify-content:space-between;font-size:12px;"><span style="font-weight:800;">FK</span><span>▶ 0:60</span></span>
+              <span style="font-size:22px;font-weight:800;line-height:1.2;">„Hab ich auch erlebt. Und ich bin noch hier.“</span>
+            </div>
+            <span style="display:flex;flex-direction:column;"><strong>Florian Künstler</strong><span style="font-size:13px;color:#605d5d;">Schirmherr · Musiker</span></span>
+            <span style="font-size:14px;font-weight:800;color:#844c82;">‚Gib nicht auf‘ anhören</span>
+            <span style="font-size:11px;color:#605d5d;">[Platzhalter – Rechte an Foto, Musik, Marke offen]</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="aspect-ratio:9/14;background:#201e1d;color:#f3f2f2;padding:18px;display:flex;flex-direction:column;justify-content:space-between;"><span style="display:flex;justify-content:space-between;font-size:12px;"><span style="font-weight:800;">?</span><span>▶ 0:60</span></span><span style="font-size:22px;font-weight:800;">„[Zitat einsetzen]“</span></div>
+            <span style="display:flex;flex-direction:column;"><strong>[Vorname], [Alter]</strong><span style="font-size:13px;color:#605d5d;">Betroffene:r</span></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="aspect-ratio:9/14;background:#444141;color:#f3f2f2;padding:18px;display:flex;flex-direction:column;justify-content:space-between;"><span style="display:flex;justify-content:space-between;font-size:12px;"><span style="font-weight:800;">?</span><span>▶ 0:60</span></span><span style="font-size:22px;font-weight:800;">„[Zitat einsetzen]“</span></div>
+            <span style="display:flex;flex-direction:column;"><strong>[Vorname]</strong><span style="font-size:13px;color:#605d5d;">Betroffene:r · anonym</span></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="aspect-ratio:9/14;background:#201e1d;color:#f3f2f2;padding:18px;display:flex;flex-direction:column;justify-content:space-between;"><span style="display:flex;justify-content:space-between;font-size:12px;"><span style="font-weight:800;">?</span><span>▶ 0:60</span></span><span style="font-size:22px;font-weight:800;">„[Zitat einsetzen]“</span></div>
+            <span style="display:flex;flex-direction:column;"><strong>[Name]</strong><span style="font-size:13px;color:#605d5d;">Schirmherr:in</span></span>
+          </div>
+        </section>
+        <section style="background:#eae9e9;">
+          <div style="max-width:1240px;margin:0 auto;padding:72px 32px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px;align-items:center;">
+            <h2 style="font-size:52px;font-weight:800;letter-spacing:-.02em;line-height:1.02;">Deine Geschichte kann jemandem den Abend retten.</h2>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <p style="font-size:17px;">Du hast eine Krise erlebt und bist noch hier? Erzähl es in 60 Sekunden – mit Namen oder anonym. Wir begleiten dich dabei.</p>
+              <button style="align-self:flex-start;background:#844c82;color:#fff;border:0;padding:12px 18px;font-weight:800;font-size:15px;cursor:pointer;" style-hover="background:#6a3a68;">Geschichte einreichen</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isRad }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Emotionsrad" style="max-width:1240px;margin:0 auto;padding:72px 32px 96px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:center;">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#844c82;font-weight:600;">Aus Fach 5 · zum Ausprobieren</span>
+          <h1 style="font-size:64px;line-height:1;letter-spacing:-.03em;font-weight:800;">Das Emotionsrad</h1>
+          <p style="font-size:18px;">Für Momente, in denen die Worte fehlen. Tipp an, was passt – auch mehrere.</p>
+          <div style="margin-top:16px;border-top:2px solid #201e1d;padding-top:16px;display:flex;flex-direction:column;gap:12px;">
+            <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#605d5d;">Ausgewählt</span>
+            <p style="font-size:22px;font-weight:800;min-height:34px;">{{ emoText }}</p>
+            <button onClick="{{ clearEmo }}" style="align-self:flex-start;background:none;border:1px solid rgba(32,30,29,.4);padding:8px 12px;font-size:13px;cursor:pointer;" style-hover="background:rgba(32,30,29,.07);">Zurücksetzen</button>
+          </div>
+        </div>
+        <div style="position:relative;aspect-ratio:1;max-width:600px;width:100%;justify-self:center;">
+          <div style="position:absolute;inset:6%;border-radius:50%;border:2px solid #844c82;"></div>
+          <div style="position:absolute;inset:30%;border-radius:50%;background:#844c82;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:6px;">
+            <span style="font-size:22px;font-weight:800;line-height:1.15;">Welches Wort ist am nächsten dran?</span>
+            <span style="font-size:14px;">Zeigen reicht.</span>
+          </div>
+          <sc-for list="{{ emotions }}" as="e" hint-placeholder-count="8">
+            <button onClick="{{ e.toggle }}" style="position:absolute;left:{{ e.x }};top:{{ e.y }};transform:translate(-50%,-50%);background:{{ e.bg }};color:{{ e.fg }};border:2px solid #844c82;padding:12px 18px;font-size:17px;font-weight:800;cursor:pointer;min-width:120px;">{{ e.word }}</button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <footer style="background:#201e1d;color:#f3f2f2;">
+    <div style="max-width:1240px;margin:0 auto;padding:48px 32px;display:grid;grid-template-columns:2fr 2fr 1fr;gap:48px;font-size:14px;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <span style="font-weight:800;font-size:18px;">Der Violette Koffer</span>
+        <span style="color:#bab6b6;">Kein Medizinprodukt. Ersetzt keine Therapie und keinen Notruf.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#bab6b6;">Träger</span>
+        <span>NEFESCH 52°13° e.V.</span>
+        <span style="color:#bab6b6;">HAEVN Altes Pfarrhaus, Stift Marienfließ 9, 16945 Marienfließ</span>
+        <a href="mailto:hallo@nefesch.org" style="color:#f3f2f2;">hallo@nefesch.org</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <a href="#" style="color:#f3f2f2;">Impressum</a>
+        <a href="#" style="color:#f3f2f2;">Datenschutz</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { page: 'start', filter: 'ALLE', emo: [], sicher: 0 };
+  go = (p) => () => { this.setState({ page: p }); window.scrollTo(0, 0); };
+  renderVals() {
+    const s = this.state, V = '#844c82';
+    const navItems = [['koffer','Der Koffer'],['sicher','SICHER-Kurs'],['situationen','Situationen'],['mutmacher','Mutmacher'],['rad','Emotionsrad']];
+    const active = s.page === 'karte04' ? 'situationen' : s.page;
+    const nav = navItems.map(([k,l]) => ({ label: l, go: this.go(k), color: active===k?V:'#201e1d', weight: active===k?800:400, line: active===k?V:'transparent' }));
+    const cats = { DA:'DA SEIN', BE:'BEGLEITEN', WE:'WEITERLEITEN' };
+    const raw = [
+      ['DA','Jemand bricht plötzlich in Tränen aus',0],['BE','Jemand zieht sich sichtbar zurück',0],['BE','Jemand wirkt überfordert',0],
+      ['BE','Jemand hat eine Panikattacke',1],['WE','Jemand spricht über Suizidgedanken',0],['WE','Jemand erzählt von Selbstverletzung',0],
+      ['BE','Jemand zeigt Anzeichen von Sucht',1],['BE','Jemand wirkt abwesend, abgeschaltet',1],['DA','Jemand hat eine schlimme Nachricht erhalten',0],
+      ['BE','Jemand reagiert mit Wut oder Aggression',1],['DA','Jemand berichtet von anhaltender Angst',0],['DA','Jemand ist neu und wirkt belastet',0]];
+    const situations = raw.map(([c,t,a],i) => ({ cat: cats[c], title: t, vis: a ? 'visible' : 'hidden', num: String(i+1).padStart(2,'0'),
+      catColor: c==='WE' ? '#ae1800' : V, go: i===3 ? this.go('karte04') : this.go('karte04') }))
+      .filter(x => s.filter==='ALLE' || x.cat===s.filter);
+    const filters = ['ALLE','DA SEIN','BEGLEITEN','WEITERLEITEN'].map(f => ({ label: f==='ALLE'?'Alle 12':f,
+      on: () => this.setState({ filter: f }), bg: s.filter===f?V:'transparent', fg: s.filter===f?'#fff':'#201e1d' }));
+    const emoWords = ['Angst','Wut','Trauer','Scham','Einsamkeit','Leere','Erschöpfung','Hoffnung'];
+    const emotions = emoWords.map((w,i) => { const on = s.emo.includes(w); const a = (i/8)*2*Math.PI - Math.PI/2;
+      return { word: w, bg: on?V:'#eae9e9', fg: on?'#fff':'#201e1d', x: `${50+Math.cos(a)*38}%`, y: `${50+Math.sin(a)*38}%`,
+        toggle: () => this.setState(st => ({ emo: st.emo.includes(w) ? st.emo.filter(e=>e!==w) : [...st.emo, w] })) }; });
+    const emoText = s.emo.length ? s.emo.join(' · ') : 'Noch nichts ausgewählt. Du musst nichts erklären.';
+    const sicherData = [
+      ['S','Selbstfürsorge','Sorge zuerst für dich, um stabil zu bleiben. Du bist keine Hilfe, wenn du selbst kippst.'],
+      ['I','Impuls setzen','Mach den ersten Schritt. Sprich an – warte nicht, bis der andere anfängt.'],
+      ['C','Caring & Kontakt','Stell Zuwendung her und halte sie: Präsenz, Blick, Erlaubnis fragen.'],
+      ['H','Handeln oder Halten?','Braucht es jetzt eine Handlung – oder jemanden, der bleibt?'],
+      ['E','Ertragen & Annehmen','Halte aus, was du nicht lösen kannst. Nicht wegreden, nicht beschönigen.'],
+      ['R','Ressourcen','Aktiviere Kraftquellen: deine, die der Person, die des Umfelds – und professionelle.']];
+    const sicherLetters = sicherData.map(([l],i) => ({ l, on: () => this.setState({ sicher: i }),
+      bg: s.sicher===i?V:'transparent', fg: s.sicher===i?'#fff':'#201e1d' }));
+    const cur = sicherData[s.sicher];
+    return {
+      nav, situations, filters, emotions, emoText, sicherLetters,
+      sicherL: cur[0], sicherT: cur[1], sicherB: cur[2], sicherN: `${cur[0]} · Video ${s.sicher+1} von 6`,
+      isHilfe: s.page==='hilfe', isStart: s.page==='start', isSicher: s.page==='sicher', isKoffer: s.page==='koffer',
+      isSit: s.page==='situationen', isKarte: s.page==='karte04', isMut: s.page==='mutmacher', isRad: s.page==='rad',
+      goStart: this.go('start'), goHilfe: this.go('hilfe'), goSicher: this.go('sicher'), goKoffer: this.go('koffer'),
+      goSituationen: this.go('situationen'), goKarte: this.go('karte04'), goMutmacher: this.go('mutmacher'), goRad: this.go('rad'),
+      clearEmo: () => this.setState({ emo: [] }),
+    };
+  }
+}
+</script>
+</body>
+</html>
